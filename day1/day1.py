@@ -1,11 +1,21 @@
 def calibrateLine(line):
+    nums_as_strings = {"one": "one", "two": "two", "three": "three", 
+                       "four": "four", "five":"five", "six":"six", 
+                       "seven":"seven", "eight":"eight", "nine":"nine"}
     firstNum = ""
     lastNum = ""
+    possible_string_num = ""
     for char in line: 
         if char.isnumeric() and firstNum == "": 
             firstNum = char 
+            possible_string_num = ""
         elif char.isnumeric() and firstNum != "": 
             lastNum = char 
+            possible_string_num = ""
+        elif char.isnumeric() == False: 
+            possible_string_num += char 
+            if possible_string_num in nums_as_strings.values():
+                #matches 
 
     num_str = ""
     if lastNum == "" and firstNum != "":
