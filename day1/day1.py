@@ -1,22 +1,46 @@
 def calibrateLine(line):
-    nums_as_strings = {"one": "one", "two": "two", "three": "three", 
-                       "four": "four", "five":"five", "six":"six", 
-                       "seven":"seven", "eight":"eight", "nine":"nine"}
+    nums_as_strings = {"one": "1", "two": "2", "three": "3", 
+                       "four": "4", "five": "5", "six": "6", 
+                       "seven": "7", "eight": "8", "nine": "9"}
     firstNum = ""
     lastNum = ""
-    possible_string_num = ""
-    for char in line: 
-        if char.isnumeric() and firstNum == "": 
-            firstNum = char 
-            possible_string_num = ""
-        elif char.isnumeric() and firstNum != "": 
-            lastNum = char 
-            possible_string_num = ""
-        elif char.isnumeric() == False: 
-            possible_string_num += char 
-            if possible_string_num in nums_as_strings.values():
-                #matches 
+    firstNumIndex = len(line) - 1
+    lastNumIndex = 0 
+    currentIndex = 0
 
+    for char in line: 
+        try: 
+            integer = int(char)
+            if integer and firstNum == "": 
+                firstNum = char 
+                firstNumIndex = currentIndex
+            if integer and firstNum != "": 
+                lastNum = char 
+                lastNumIndex = currentIndex
+            currentIndex += 1
+        except: 
+            currentIndex += 1
+
+    #is lettered word before or after? 
+    for number_string in nums_as_strings: 
+        try: 
+            index = line.index(number_string)
+            #First occurrence 
+            if index >= 0: 
+                if index <= firstNumIndex:
+                    firstNum = nums_as_strings[number_string]
+                    firstNumIndex = index
+
+            #Last occurrence
+            index = line.rfind(number_string)
+            if index >= 0: 
+                if index >= lastNumIndex: 
+                    lastNum = nums_as_strings[number_string]
+                    lastNumIndex = index 
+
+        except: 
+            continue
+        
     num_str = ""
     if lastNum == "" and firstNum != "":
         num_str = firstNum + firstNum 
@@ -26,7 +50,6 @@ def calibrateLine(line):
         #No number, skip line
         num_str = "0"
 
-    print("Num: ", int(num_str))
     return int(num_str)
     
 def calibrate(filename):
@@ -39,7 +62,6 @@ def calibrate(filename):
         if not line: 
             break 
         line = line.strip() 
-
         sum += calibrateLine(line)
         
 
@@ -47,5 +69,5 @@ def calibrate(filename):
     file.close()
 
 if __name__ == "__main__": 
-    "Calibrating..."
+    print("Calibrating...")
     calibrate("dataset1.txt")
